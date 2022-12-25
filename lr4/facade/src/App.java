@@ -7,7 +7,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class App {
     public static void main(String[] args) throws Exception {
+        ConverterFacade easyConverter = new ConverterFacade();
+        easyConverter.getFilesAndConvert();
+        
+    }
+}
 
+class ConverterFacade{
+    public void getFilesAndConvert(){
         /* piece of code that gets file from window, not important to the task */
         String pathStr, pathStrWrite, formatIn, formatOut;
         JFileChooser chooser = new JFileChooser();
@@ -25,8 +32,7 @@ public class App {
                 if ( splitArr.length > 1){
                     /* !!!!!!!!!!!!!!!!! actual call to facade !!!!!!!!!!!!!!!!! */
                     formatOut = splitArr[1];
-                    ConverterFacade easyConverter = new ConverterFacade();
-                    easyConverter.convert(in, formatOut, pathStrWrite.substring(0, pathStrWrite.lastIndexOf("\\")));
+                    convert(in, formatOut, pathStrWrite.substring(0, pathStrWrite.lastIndexOf("\\")));
                 }
                 else{
                     System.out.println("error");
@@ -40,9 +46,6 @@ public class App {
         }
         }
     }
-}
-
-class ConverterFacade{
     public void convert(File in, String formatOut, String outPath){
         switch ( in.getName().split("\\.")[1]){
             case "txt":
@@ -205,7 +208,7 @@ class imgTxt extends Converter{
     void convert(File in, String formatOut, String outPath) {
         String fileName = in.getName().substring(0, in.getName().lastIndexOf("\\."));
         // some serious conersions happen here, which makes this method and class unique and extend-worthy
-        System.out.println("txt to img converted");
+        System.out.println("img to txt converted");
         
     }
 }
@@ -215,7 +218,7 @@ class imgImg extends Converter{
    void convert(File in, String formatOut, String outPath) {
        String fileName = in.getName().substring(0, in.getName().lastIndexOf("\\."));
        // some serious conersions happen here, which makes this method and class unique and extend-worthy
-       System.out.println("txt to img converted");
+       System.out.println("img to img converted");
        
        
    }
@@ -226,6 +229,6 @@ class txtTxt extends Converter{
     void convert(File in, String formatOut, String outPath) {
         String fileName = in.getName().substring(0, in.getName().lastIndexOf("."));
         // some serious conersions happen here, which makes this method and class unique and extend-worthy
-        System.out.println("txt to img converted");        
+        System.out.println("txt to txt converted");        
     }
 }
