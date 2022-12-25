@@ -5,23 +5,38 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.CountDownLatch;
 
+
+
+
+/**** i honestly dont even understand the assignment...  */
+
 public class App {
     public static void main(String[] args) throws Exception {
-        Decorator paliSet = new PaliSet(new TreeSet<String>());
+        Set<String> paliSetReal = new PaliSet(new TreeSet<String>(), true);
+
+        paliSetReal.add("qwe");
+
+        Set<String> paliSetMirror = new PaliSet( new TreeSet<String>(), false);
+
+        paliSetMirror.add("qwe");
+
         }
 }
 
 
-abstract class Decorator implements Set<String>{
+abstract class Decorator<String> implements Set<String>{
     protected Set<String> setInstance;
     Decorator(Set<String> inst){
         setInstance = inst;
     }
 }
-class PaliSet extends Decorator{
+class PaliSet<String> extends Decorator<String>{
 
-    PaliSet(Set<String> inst){
+    boolean real;
+
+    PaliSet(Set<String> inst, boolean real){
         super(inst);
+        this.real = real;
     }
     /**********mandatory stuff**************/
     @Override
@@ -34,11 +49,7 @@ class PaliSet extends Decorator{
         return setInstance.isEmpty();
     }
 
-    @Override
-    public boolean contains(Object o) {
-        return setInstance.contains(o);
-    }
-
+    
     @Override
     public Iterator<String> iterator() {
         return setInstance.iterator();
@@ -54,16 +65,7 @@ class PaliSet extends Decorator{
         return setInstance.toArray(a);
     }
 
-    @Override
-    public boolean add(String e) {
-        return setInstance.add(e);
-    }
-
-    @Override
-    public boolean remove(Object o) {
-        return setInstance.remove(o);
-    }
-
+    
     @Override
     public boolean containsAll(Collection<?> c) {
         return setInstance.containsAll(c);
@@ -89,17 +91,46 @@ class PaliSet extends Decorator{
     }
     
     /*********** important stuff ************/
-    String reverse(String el){
-        char ch;
-        String elRev = "";
-        for (int i=0; i< el.length(); i++)
-            {
-                ch= el.charAt(i); //extracts each character
-                elRev= ch+elRev; //adds each character in front of the existing string
-            }
-        return elRev;
+    @Override
+    public boolean add(Object o) {
+        if ( real ){
+            return setInstance.add((String)o);
+        } else{
+            
+            return setInstance.add(reverse((String)o));
+        }
     }
-    
+
+    @Override
+    public boolean remove(Object el) {
+        if ( real ){
+            return remove((String)el);
+        }
+        else{
+            return remove(reverse((String)el));
+        }
+    }
+    @Override
+    public boolean contains(Object o) {
+        if (real){
+            return contains((String)o);
+        }
+        else{
+            return contains(reverse((String)o));
+        }
+    }
+
+    String reverse(Object el){
+        char ch;
+        java.lang.String elRev = "";
+        for (int i = 0; i < el.toString().length(); ++i)
+            {
+                ch = el.toString().charAt(i);
+                elRev= ch + elRev.toString(); //adds each character in front of the existing string
+            }
+        return (String)elRev;
+    }
+    /*
     public boolean add(String el, boolean real){
         if ( real ){
             return add(el);
@@ -122,7 +153,7 @@ class PaliSet extends Decorator{
         else{
             return remove(reverse(el));
         }
-    }
+    }*/
 }
 
 
